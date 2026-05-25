@@ -1,5 +1,9 @@
 # stream-fetch
 
+![Python](https://img.shields.io/badge/python-%3E%3D3.11-blue)
+![License](https://img.shields.io/github/license/dev-ansung/m3u8-downloader)
+![GitHub Actions](https://img.shields.io/github/actions/workflow/status/dev-ansung/m3u8-downloader/ci.yml?label=tests)
+
 Download any video URL to MP4 — HLS streams or direct links — with optional time-range clipping.
 
 ```bash
@@ -22,7 +26,7 @@ ffmpeg downloads the entire stream before it can trim. For a 1-minute clip from 
 
 ## Requirements
 
-- Python ≥ 3.11
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)
 - [ffmpeg](https://ffmpeg.org/download.html) on your `PATH`
 
 ## Installation
