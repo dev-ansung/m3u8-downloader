@@ -80,7 +80,7 @@ Some CDNs require specific `Referer` or `Origin` headers. These are configured p
 
 | CDN domain | Headers applied |
 |------------|----------------|
-| `surrit.com` | `Referer: https://missav.ai/`, `Origin: https://missav.ai` |
+| `surrit.com` | `Referer` and `Origin` set to the associated streaming site |
 
 To add a new site, add an entry to `_PROFILES` in [src/m3u8_downloader/site_profiles.py](src/m3u8_downloader/site_profiles.py):
 
