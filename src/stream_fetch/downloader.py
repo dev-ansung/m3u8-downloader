@@ -6,8 +6,8 @@ import requests
 from Crypto.Cipher import AES
 from tqdm import tqdm
 
-from m3u8_downloader.models import DownloadConfig, Segment
-from m3u8_downloader.site_profiles import SiteProfiles
+from stream_fetch.models import DownloadConfig, Segment
+from stream_fetch.site_profiles import SiteProfiles
 
 
 class SegmentDownloader:

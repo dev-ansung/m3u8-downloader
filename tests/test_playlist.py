@@ -1,5 +1,5 @@
-from m3u8_downloader.playlist import PlaylistFetcher
-from m3u8_downloader.models import DownloadConfig
+from stream_fetch.playlist import PlaylistFetcher
+from stream_fetch.models import DownloadConfig
 
 
 SIMPLE_M3U8 = """\

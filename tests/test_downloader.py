@@ -1,6 +1,6 @@
 import pytest
-from m3u8_downloader.downloader import SegmentDownloader
-from m3u8_downloader.models import DownloadConfig, Segment
+from stream_fetch.downloader import SegmentDownloader
+from stream_fetch.models import DownloadConfig, Segment
 
 
 def _make_segments(durations: list[float]) -> list[Segment]:

@@ -1,6 +1,6 @@
 import pytest
-from m3u8_downloader.time_parser import TimeParser
-from m3u8_downloader.models import DownloadConfig
+from stream_fetch.time_parser import TimeParser
+from stream_fetch.models import DownloadConfig
 
 
 def test_parse_seconds():

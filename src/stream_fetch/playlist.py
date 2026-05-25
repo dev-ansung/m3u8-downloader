@@ -3,8 +3,8 @@ import requests
 import m3u8
 from urllib.parse import urljoin
 
-from m3u8_downloader.models import DownloadConfig, Segment
-from m3u8_downloader.site_profiles import SiteProfiles
+from stream_fetch.models import DownloadConfig, Segment
+from stream_fetch.site_profiles import SiteProfiles
 
 
 class PlaylistFetcher:

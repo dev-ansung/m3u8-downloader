@@ -1,17 +1,17 @@
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 import pytest
-from m3u8_downloader.merger import FfmpegManager
+from stream_fetch.merger import FfmpegManager
 
 
 def test_check_ffmpeg_raises_if_missing():
-    with patch("m3u8_downloader.merger.shutil.which", return_value=None):
+    with patch("stream_fetch.merger.shutil.which", return_value=None):
         with pytest.raises(RuntimeError, match="ffmpeg not found"):
             FfmpegManager.check()
 
 
 def test_check_ffmpeg_passes_if_present():
-    with patch("m3u8_downloader.merger.shutil.which", return_value="/usr/bin/ffmpeg"):
+    with patch("stream_fetch.merger.shutil.which", return_value="/usr/bin/ffmpeg"):
         FfmpegManager.check()  # should not raise
 
 
@@ -20,7 +20,7 @@ def test_merge_calls_ffmpeg_without_trim(tmp_path):
     seg1.write_bytes(b"fake")
     out = tmp_path / "out.mp4"
 
-    with patch("m3u8_downloader.merger.subprocess.run") as mock_run:
+    with patch("stream_fetch.merger.subprocess.run") as mock_run:
         mock_run.return_value = MagicMock(returncode=0)
         FfmpegManager.merge(
             segment_paths=[seg1],
@@ -40,7 +40,7 @@ def test_merge_calls_ffmpeg_with_trim(tmp_path):
     seg1.write_bytes(b"fake")
     out = tmp_path / "out.mp4"
 
-    with patch("m3u8_downloader.merger.subprocess.run") as mock_run:
+    with patch("stream_fetch.merger.subprocess.run") as mock_run:
         mock_run.return_value = MagicMock(returncode=0)
         FfmpegManager.merge(
             segment_paths=[seg1],

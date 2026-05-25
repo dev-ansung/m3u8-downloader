@@ -1,4 +1,4 @@
-from m3u8_downloader.models import Segment, DownloadConfig
+from stream_fetch.models import Segment, DownloadConfig
 
 
 def test_segment_defaults():

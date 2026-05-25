@@ -1,5 +1,5 @@
 from __future__ import annotations
-from m3u8_downloader.models import DownloadConfig
+from stream_fetch.models import DownloadConfig
 
 
 class TimeParser:

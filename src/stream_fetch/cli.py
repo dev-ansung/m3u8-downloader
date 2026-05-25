@@ -3,12 +3,14 @@ import sys
 import tempfile
 from datetime import datetime
 from pathlib import Path
+from urllib.parse import urlparse
 
-from m3u8_downloader.models import DownloadConfig
-from m3u8_downloader.time_parser import TimeParser
-from m3u8_downloader.playlist import PlaylistFetcher
-from m3u8_downloader.downloader import SegmentDownloader
-from m3u8_downloader.merger import FfmpegManager
+from stream_fetch.models import DownloadConfig
+from stream_fetch.time_parser import TimeParser
+from stream_fetch.playlist import PlaylistFetcher
+from stream_fetch.downloader import SegmentDownloader
+from stream_fetch.merger import FfmpegManager
+from stream_fetch.direct import DirectDownloader
 
 
 def _parse_headers(header_list: list[str]) -> dict[str, str]:
@@ -19,20 +21,25 @@ def _parse_headers(header_list: list[str]) -> dict[str, str]:
     return headers
 
 
+def _is_hls(url: str) -> bool:
+    path = urlparse(url).path.lower()
+    return path.endswith(".m3u8") or path.endswith(".m3u")
+
+
 def main() -> None:
     import argparse
 
     parser = argparse.ArgumentParser(
-        prog="m3u8dl",
-        description="Download an HLS m3u8 stream to MP4",
+        prog="stream-fetch",
+        description="Download HLS streams and direct video URLs to MP4",
     )
-    parser.add_argument("url", help="m3u8 playlist URL")
+    parser.add_argument("url", help="Video URL (.m3u8 for HLS, or any direct video URL)")
     parser.add_argument("--start", metavar="TIME", help="Start time (seconds or HH:MM:SS)")
     parser.add_argument("--end", metavar="TIME", help="End time (seconds or HH:MM:SS)")
     parser.add_argument("--duration", metavar="TIME", help="Duration from --start (seconds or HH:MM:SS)")
     parser.add_argument("--output", "-o", metavar="FILE", help="Output filename (default: YYYYMMDD-HHMMSS.mp4)")
     parser.add_argument("--header", metavar="KEY:VALUE", action="append", default=[], dest="headers")
-    parser.add_argument("--workers", type=int, default=8, metavar="N", help="Parallel download workers (default: 8)")
+    parser.add_argument("--workers", type=int, default=8, metavar="N", help="Parallel download workers (default: 8, HLS only)")
 
     args = parser.parse_args()
 
@@ -69,6 +76,13 @@ def main() -> None:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
+    if _is_hls(args.url):
+        _run_hls(config, output_path)
+    else:
+        _run_direct(config, output_path)
+
+
+def _run_hls(config: DownloadConfig, output_path: Path) -> None:
     try:
         print(f"Fetching playlist: {config.url}")
         fetcher = PlaylistFetcher(config)
@@ -105,4 +119,14 @@ def main() -> None:
             print(f"Error: {e}", file=sys.stderr)
             sys.exit(1)
 
+    print(f"Done: {output_path}")
+
+
+def _run_direct(config: DownloadConfig, output_path: Path) -> None:
+    print(f"Downloading: {config.url}")
+    try:
+        DirectDownloader(config).download(output_path)
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
     print(f"Done: {output_path}")
