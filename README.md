@@ -2,7 +2,8 @@
 
 ![Python](https://img.shields.io/badge/python-%3E%3D3.11-blue)
 ![License](https://img.shields.io/github/license/dev-ansung/m3u8-downloader)
-![GitHub Actions](https://img.shields.io/github/actions/workflow/status/dev-ansung/m3u8-downloader/ci.yml?label=tests)
+![CI](https://img.shields.io/github/actions/workflow/status/dev-ansung/m3u8-downloader/ci.yml?label=tests)
+![ffmpeg](https://img.shields.io/badge/requires-ffmpeg-green)
 
 Download any video URL to MP4 — HLS streams or direct links — with optional time-range clipping.
 
