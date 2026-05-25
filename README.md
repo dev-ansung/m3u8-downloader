@@ -1,8 +1,8 @@
 # stream-fetch
 
 ![Python](https://img.shields.io/badge/python-%3E%3D3.11-blue)
-![License](https://img.shields.io/github/license/dev-ansung/m3u8-downloader)
-![CI](https://img.shields.io/github/actions/workflow/status/dev-ansung/m3u8-downloader/ci.yml?label=tests)
+![License](https://img.shields.io/github/license/dev-ansung/stream-fetch)
+![CI](https://img.shields.io/github/actions/workflow/status/dev-ansung/stream-fetch/ci.yml?label=tests)
 ![ffmpeg](https://img.shields.io/badge/requires-ffmpeg-green)
 
 Download any video URL to MP4 — HLS streams or direct links — with optional time-range clipping.
@@ -35,13 +35,13 @@ ffmpeg downloads the entire stream before it can trim. For a 1-minute clip from 
 Zero install — run directly:
 
 ```bash
-uvx --from git+https://github.com/dev-ansung/m3u8-downloader stream-fetch <url>
+uvx --from git+https://github.com/dev-ansung/stream-fetch stream-fetch <url>
 ```
 
 Install globally:
 
 ```bash
-uv tool install git+https://github.com/dev-ansung/m3u8-downloader
+uv tool install git+https://github.com/dev-ansung/stream-fetch
 stream-fetch <url>
 ```
 
@@ -99,7 +99,7 @@ Headers from `--header` flags always override profile defaults.
 ## Development
 
 ```bash
-git clone https://github.com/dev-ansung/m3u8-downloader && cd m3u8-downloader
+git clone https://github.com/dev-ansung/stream-fetch && cd stream-fetch
 uv sync --dev
 uv run stream-fetch --help
 uv run pytest
