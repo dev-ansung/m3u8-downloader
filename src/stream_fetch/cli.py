@@ -34,9 +34,9 @@ def main() -> None:
         description="Download HLS streams and direct video URLs to MP4",
     )
     parser.add_argument("url", help="Video URL (.m3u8 for HLS, or any direct video URL)")
-    parser.add_argument("--start", metavar="TIME", help="Start time (seconds or HH:MM:SS)")
-    parser.add_argument("--end", metavar="TIME", help="End time (seconds or HH:MM:SS)")
-    parser.add_argument("--duration", metavar="TIME", help="Duration from --start (seconds or HH:MM:SS)")
+    parser.add_argument("--start", "-s", metavar="TIME", help="Start time (seconds or HH:MM:SS)")
+    parser.add_argument("--end", "-e", metavar="TIME", help="End time (seconds or HH:MM:SS)")
+    parser.add_argument("--duration", "-d", metavar="TIME", help="Duration from --start (seconds or HH:MM:SS)")
     parser.add_argument("--output", "-o", metavar="FILE", help="Output filename (default: YYYYMMDD-HHMMSS.mp4)")
     parser.add_argument("--header", metavar="KEY:VALUE", action="append", default=[], dest="headers")
     parser.add_argument("--workers", type=int, default=8, metavar="N", help="Parallel download workers (default: 8, HLS only)")
