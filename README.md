@@ -30,19 +30,13 @@ ffmpeg downloads the entire stream before it can trim. For a 1-minute clip from 
 Zero install — run directly:
 
 ```bash
-uvx stream-fetch <url>
-```
-
-From a GitHub clone:
-
-```bash
 uvx --from git+https://github.com/dev-ansung/m3u8-downloader stream-fetch <url>
 ```
 
 Install globally:
 
 ```bash
-uv tool install stream-fetch
+uv tool install git+https://github.com/dev-ansung/m3u8-downloader
 stream-fetch <url>
 ```
 
