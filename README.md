@@ -32,7 +32,7 @@ uvx m3u8dl <url>
 Or from a local clone / GitHub URL:
 
 ```bash
-uvx --from git+https://github.com/your-username/m3u8-downloader m3u8dl <url>
+uvx --from git+https://github.com/dev-ansung/m3u8-downloader m3u8dl <url>
 ```
 
 Or install globally:
