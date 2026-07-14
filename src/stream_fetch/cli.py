@@ -26,6 +26,24 @@ def _is_hls(url: str) -> bool:
     return path.endswith(".m3u8") or path.endswith(".m3u")
 
 
+def _format_timestamp_for_filename(seconds: float) -> str:
+    """Render seconds as MM_SS for use in a filename, e.g. 90.0 -> '1_30'.
+    Matches video-processing's trim.py convention exactly."""
+    minutes, secs = divmod(round(seconds), 60)
+    return f"{minutes}_{secs:02d}"
+
+
+def _default_output_path(start_sec: float | None, end_sec: float | None) -> Path:
+    """YYYYMMDD-HHMMSS.mp4, or YYYYMMDD-HHMMSS.trim-{start}-{end}.mp4 when a
+    time range is given."""
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    if start_sec is None and end_sec is None:
+        return Path(f"{timestamp}.mp4")
+    start_label = _format_timestamp_for_filename(start_sec or 0.0)
+    end_label = _format_timestamp_for_filename(end_sec) if end_sec is not None else "end"
+    return Path(f"{timestamp}.trim-{start_label}-{end_label}.mp4")
+
+
 def main() -> None:
     import argparse
 
@@ -37,7 +55,10 @@ def main() -> None:
     parser.add_argument("--start", "-s", metavar="TIME", help="Start time (seconds or HH:MM:SS)")
     parser.add_argument("--end", "-e", metavar="TIME", help="End time (seconds or HH:MM:SS)")
     parser.add_argument("--duration", "-d", metavar="TIME", help="Duration from --start (seconds or HH:MM:SS)")
-    parser.add_argument("--output", "-o", metavar="FILE", help="Output filename (default: YYYYMMDD-HHMMSS.mp4)")
+    parser.add_argument(
+        "--output", "-o", metavar="FILE",
+        help="Output filename (default: YYYYMMDD-HHMMSS.trim-{start}-{end}.mp4, or without the .trim suffix if no time range given)",
+    )
     parser.add_argument("--header", metavar="KEY:VALUE", action="append", default=[], dest="headers")
     parser.add_argument("--workers", type=int, default=8, metavar="N", help="Parallel download workers (default: 8, HLS only)")
 
@@ -57,16 +78,12 @@ def main() -> None:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
-    output_path = Path(args.output) if args.output else Path(
-        datetime.now().strftime("%Y%m%d-%H%M%S") + ".mp4"
-    )
-
     config = DownloadConfig(
         url=args.url,
         headers=_parse_headers(args.headers),
         start_sec=start_sec,
         end_sec=end_sec,
-        output_path=output_path,
+        output_path=None,
         workers=args.workers,
     )
 
@@ -75,6 +92,13 @@ def main() -> None:
     except ValueError as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
+
+    # validate() may resolve --duration into config.end_sec, so the default
+    # filename (which embeds the time range) is computed after, not before.
+    output_path = Path(args.output) if args.output else _default_output_path(
+        config.start_sec, config.end_sec
+    )
+    config.output_path = output_path
 
     if _is_hls(args.url):
         _run_hls(config, output_path)
